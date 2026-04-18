@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<!--
+  Changelog (UI-only):
+  - Refactored layout to "TheBeldiShop" dark-luxury theme with sticky navbar + editorial products section.
+  - Added Google Fonts (Playfair Display + Inter) and AOS (Animate On Scroll) for premium motion.
+  - Preserved all Supabase/JS hook IDs and module loading; no data layer changes.
+-->
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>TheBeldiShop | جلابات مغربية</title>
+  <meta name="description" content="TheBeldiShop — بوتيك ديال الجلابات المغربية بتصميم عصري وخدمة ساهلة." />
+  <meta property="og:title" content="TheBeldiShop" />
+  <meta property="og:description" content="جلابات مغربية عصرية بخدمة سريعة وتجربة شراء احترافية." />
+  <meta property="og:type" content="website" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            display: ["Tajawal", "Cairo", "sans-serif"],
+            body: ["Inter", "Tajawal", "sans-serif"],
+          },
+          colors: {
+            luxury: {
+              50: "#e9edff",
+              100: "#d1dbff",
+              200: "#a8bcff",
+              300: "#7798ff",
+              500: "#466fe8",
+              600: "#3658cf",
+              700: "#2a43a8",
+              900: "#0a1026",
+            },
+            gold: {
+              300: "#f5d17a",
+              400: "#e8bb53",
+              500: "#d89b1f",
+            },
+          },
+          boxShadow: {
+            luxury: "0 28px 60px rgba(8, 15, 43, 0.32)",
+            glow: "0 0 0 1px rgba(245, 209, 122, 0.25), 0 14px 30px rgba(216, 155, 31, 0.22)",
+            card: "0 14px 35px rgba(3, 9, 28, 0.35)",
+          },
+          keyframes: {
+            floatUp: {
+              "0%": { opacity: "0", transform: "translateY(16px)" },
+              "100%": { opacity: "1", transform: "translateY(0)" },
+            },
+          },
+          animation: {
+            floatUp: "floatUp .55s ease-out both",
+            fadeIn: "floatUp .65s ease-out both",
+          },
+        },
+      },
+    };
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600;700&family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://unpkg.com/aos@2.3.4/dist/aos.css" />
+  <style>
+    .drawer-backdrop {
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .28s ease;
+    }
+
+    .drawer-backdrop.open {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .cart-drawer {
+      transform: translateX(105%);
+      transition: transform .34s ease;
+    }
+
+    .cart-drawer.open {
+      transform: translateX(0);
+    }
+
+    .modal {
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .25s ease;
+    }
+
+    .modal.show {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .toast {
+      opacity: 0;
+      transform: translateY(12px);
+      transition: all .25s ease;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .add-cart-btn.is-added {
+      background: #16a34a !important;
+      border-color: #16a34a !important;
+      color: #fff !important;
+    }
+
+    .nav-link {
+      position: relative;
+    }
+
+    .nav-link::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      bottom: -6px;
+      width: 0;
+      height: 2px;
+      background: #e8bb53;
+      transition: width .22s ease;
+    }
+
+    .nav-link:hover::after {
+      width: 100%;
+    }
+
+    .whatsapp-float {
+      position: fixed;
+      left: 14px;
+      bottom: 16px;
+      z-index: 85;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      border-radius: 999px;
+      border: 1px solid #16a34a;
+      background: #22c55e;
+      color: #ffffff;
+      font-weight: 800;
+      font-size: 13px;
+      padding: 10px 14px;
+      box-shadow: 0 14px 30px rgba(34, 197, 94, 0.32);
+      transition: transform .2s ease, box-shadow .2s ease, background .2s ease;
+    }
+
+    .whatsapp-float:hover {
+      transform: translateY(-2px);
+      background: #16a34a;
+      box-shadow: 0 18px 34px rgba(22, 163, 74, 0.4);
+    }
+
+    .whatsapp-float svg {
+      width: 18px;
+      height: 18px;
+      flex-shrink: 0;
+    }
+
+    @media (max-width: 640px) {
+      .whatsapp-float {
+        right: 12px;
+        left: 12px;
+        bottom: 10px;
+        justify-content: center;
+      }
+    }
+  </style>
+</head>
+<body data-page="home" class="overflow-x-hidden bg-gradient-to-b from-white via-luxury-50 to-slate-100 text-slate-900 font-body antialiased selection:bg-gold-300/40">
+  <div class="pointer-events-none fixed inset-0 -z-10 bg-[radial-gradient(circle_at_18%_0%,rgba(70,111,232,.14),transparent_42%),radial-gradient(circle_at_82%_20%,rgba(216,155,31,.12),transparent_38%),linear-gradient(180deg,#f8faff_0%,#eff5ff_45%,#e8eef9_100%)]"></div>
+
+  <div class="loading fixed inset-0 z-[120] hidden place-content-center gap-3 bg-white/80 backdrop-blur-sm" id="loading" style="display:none">
+    <div class="h-10 w-10 animate-spin rounded-full border-2 border-slate-200 border-t-luxury-600"></div>
+    <p class="text-sm text-slate-600">كنحمّلو الكوليكسيون...</p>
+  </div>
+
+  <header class="sticky top-0 z-50 border-b border-slate-200/70 bg-white/85 backdrop-blur-xl">
+    <div class="mx-auto flex h-16 w-[min(1200px,96%)] items-center justify-between gap-2" dir="ltr">
+      <div class="flex items-center gap-2">
+        <a class="brand" href="index.html" aria-label="TheBeldiShop">
+          <span class="font-display text-[1.95rem] font-extrabold tracking-tight text-luxury-700 sm:text-3xl">TheBeldiShop</span>
+        </a>
+        <button class="rounded-full border border-slate-300 px-2.5 py-1 text-[11px] font-semibold text-slate-600 transition hover:border-luxury-400 hover:text-luxury-700 sm:px-3 sm:py-1.5 sm:text-xs" id="adminTrigger" type="button" aria-label="دخول الأدمن">دخول الأدمن</button>
+      </div>
+      <nav class="hidden items-center gap-6 text-sm md:flex">
+        <a class="nav-link text-slate-600 transition hover:text-luxury-700" href="#top">الرئيسية</a>
+        <a class="nav-link text-slate-600 transition hover:text-luxury-700" href="#products">المنتوجات</a>
+        <a class="nav-link text-slate-600 transition hover:text-luxury-700" href="#contact">تواصل معنا</a>
+      </nav>
+
+      <button class="relative inline-flex h-11 w-11 items-center justify-center rounded-full border border-slate-300 bg-white text-luxury-700 transition hover:-translate-y-0.5 hover:shadow-md" id="cartTrigger" type="button" aria-label="حل السلة">
+        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+          <path d="M2.5 4.5h2.8l2.1 10.1a2 2 0 0 0 2 1.6h8.7a2 2 0 0 0 2-1.6l1.2-6.6H7.2" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+          <circle cx="10" cy="19" r="1.3" fill="currentColor"/>
+          <circle cx="18" cy="19" r="1.3" fill="currentColor"/>
+        </svg>
+        <span class="absolute -right-1 -top-1 inline-flex min-h-5 min-w-5 items-center justify-center rounded-full border-2 border-white bg-rose-500 px-1 text-[11px] font-bold text-white" data-cart-count>0</span>
+      </button>
+    </div>
+  </header>
+
+  <main id="mainContent" class="pb-20 pt-5 md:pt-10">
+    <section id="products" aria-labelledby="productsHeading">
+      <div class="mx-auto w-[min(1200px,96%)]">
+        <div class="relative overflow-hidden rounded-3xl border border-slate-200 bg-gradient-to-br from-white via-luxury-50 to-[#eef5ff] p-4 shadow-[0_24px_45px_rgba(42,67,168,.14)] sm:p-5 md:p-8" data-aos="fade-up">
+          <div class="pointer-events-none absolute -right-20 top-[-80px] h-52 w-52 rounded-full bg-gold-400/20 blur-3xl"></div>
+          <div class="pointer-events-none absolute -left-20 bottom-[-90px] h-56 w-56 rounded-full bg-luxury-300/30 blur-3xl"></div>
+
+          <div class="relative grid gap-6 md:grid-cols-[minmax(0,1.15fr)_minmax(320px,.85fr)] md:items-end animate-fadeIn">
+            <div class="hero-copy space-y-4">
+              <span class="inline-flex rounded-full border border-gold-400/40 bg-white/90 px-3 py-1 text-[11px] font-bold tracking-wide text-luxury-700">TheBeldiShop Premium Collection</span>
+              <h2 class="font-display text-3xl font-extrabold leading-[1.2] text-luxury-900 sm:text-4xl md:text-[3.35rem]" id="productsHeading">أناقة مغربية فاخرة كتوصل لباب دارك</h2>
+              <p class="max-w-3xl text-sm leading-7 text-slate-700 sm:text-base md:text-[1.24rem] md:leading-9">توصيل سريع فالمغرب، خلاص عند الاستلام، وجودة ممتازة كتخليك تبان ستايل من أول لبسة.</p>
+
+              <div class="flex flex-col gap-2 pt-1 sm:flex-row sm:items-center sm:gap-3">
+                <a href="#productsGrid" class="inline-flex min-h-12 items-center justify-center rounded-xl border border-gold-400/45 bg-gold-400 px-6 py-3 text-center text-sm font-extrabold text-[#251800] transition hover:-translate-y-0.5 hover:bg-gold-300">🛒 تسوق الآن</a>
+                <a href="#offers" class="inline-flex min-h-12 items-center justify-center rounded-xl border border-slate-300 bg-white px-6 py-3 text-center text-sm font-extrabold text-slate-700 transition hover:-translate-y-0.5 hover:bg-slate-50">🔥 العروض</a>
+              </div>
+            </div>
+
+            <div class="space-y-3 rounded-2xl border border-white/70 bg-white/70 p-3 shadow-sm backdrop-blur-sm md:p-4">
+              <div class="search-box flex items-center gap-2 rounded-full border border-slate-300 bg-white px-4 py-3 shadow-sm">
+                <input type="text" id="searchInput" placeholder="قلب فالمنتوجات..." aria-label="قلب على المنتوج" class="w-full bg-transparent text-sm text-slate-800 placeholder:text-slate-400 focus:outline-none" />
+                <span class="search-icon text-luxury-600" aria-hidden="true">⌕</span>
+              </div>
+              <p class="hero-note text-center text-[11px] font-semibold tracking-wide text-slate-500 sm:text-xs">خدمة الزبناء 7/7 ومتابعة فورية فالواتساب.</p>
+              <div class="grid grid-cols-2 gap-2 text-center">
+                <span class="rounded-lg border border-slate-200 bg-white px-2 py-2 text-[11px] font-bold text-slate-600">+120 طلب ناجح</span>
+                <span class="rounded-lg border border-slate-200 bg-white px-2 py-2 text-[11px] font-bold text-slate-600">⭐4.8 تقييم الزبناء</span>
+              </div>
+            </div>
+          </div>
+
+          <div id="offers" class="mt-6 grid gap-3 sm:grid-cols-3" data-aos="fade-up" data-aos-delay="120">
+            <article class="flex min-h-[96px] flex-col justify-center rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
+              <strong class="block text-sm font-extrabold text-luxury-700">🚚 توصيل سريع فالمغرب</strong>
+              <span class="mt-1 text-[11px] leading-5 text-slate-600 sm:text-xs">توصيل مجاني للطلبيات ابتداء من 399 درهم</span>
+            </article>
+            <article class="flex min-h-[96px] flex-col justify-center rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
+              <strong class="block text-sm font-extrabold text-luxury-700">💰 خلاص عند الاستلام</strong>
+              <span class="mt-1 text-[11px] leading-5 text-slate-600 sm:text-xs">أداء آمن وساهل منين توصلك الطلبية</span>
+            </article>
+            <article class="flex min-h-[96px] flex-col justify-center rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
+              <strong class="block text-sm font-extrabold text-luxury-700">🔄 ترجيع ساهل</strong>
+              <span class="mt-1 text-[11px] leading-5 text-slate-600 sm:text-xs">إمكانية الاستبدال فالمدة القانونية</span>
+            </article>
+          </div>
+        </div>
+
+        <div id="productsGrid" class="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4" aria-live="polite"></div>
+
+        <section class="mt-12" id="reviews" aria-labelledby="reviewsTitle">
+          <h3 id="reviewsTitle" class="font-display text-3xl font-extrabold text-luxury-900">آراء الزبناء</h3>
+          <div class="mt-4 grid gap-4 md:grid-cols-3">
+            <article class="rounded-2xl border border-slate-200 bg-white p-4 shadow-md">
+              <div class="text-gold-300">★★★★★</div>
+              <p class="mt-2 text-sm text-slate-700">الخامة زوينة بزاف والتوصيل كان سريع. نفس الجودة اللي كانت فالصورة.</p>
+              <span class="mt-2 block text-xs text-slate-500">- سلمى، الدار البيضاء</span>
+            </article>
+            <article class="rounded-2xl border border-slate-200 bg-white p-4 shadow-md">
+              <div class="text-gold-300">★★★★★</div>
+              <p class="mt-2 text-sm text-slate-700">أول مرة نطلب وهاني رجعت نعاود. المقاس مناسب والتشطيب نقي.</p>
+              <span class="mt-2 block text-xs text-slate-500">- ياسين، مراكش</span>
+            </article>
+            <article class="rounded-2xl border border-slate-200 bg-white p-4 shadow-md">
+              <div class="text-gold-300">★★★★★</div>
+              <p class="mt-2 text-sm text-slate-700">ثقة فالمعاملات وخلاص عند الاستلام سهل عليا القرار ديال الشراء.</p>
+              <span class="mt-2 block text-xs text-slate-500">- منى، الرباط</span>
+            </article>
+          </div>
+        </section>
+
+        <section id="about" class="mt-12 grid gap-4 md:grid-cols-2">
+          <article class="rounded-2xl border border-slate-200 bg-white p-5 shadow-md">
+            <h4 class="font-display text-2xl font-bold text-luxury-900">علاش TheBeldiShop؟</h4>
+            <p class="mt-2 text-sm text-slate-700">كنختارو موديلات عصرية بلمسة مغربية أصيلة، مع مراقبة الجودة قبل الشحن باش توصلك أفضل تجربة ممكنة.</p>
+          </article>
+          <article id="contact" class="rounded-2xl border border-slate-200 bg-white p-5 shadow-md">
+            <h4 class="font-display text-2xl font-bold text-luxury-900">تواصل معنا</h4>
+            <p class="mt-2 text-sm text-slate-700">WhatsApp: <a href="https://wa.me/212642047321" class="text-luxury-700 underline">+212 600 00 00 00</a></p>
+            <p class="mt-1 text-sm text-slate-700">متاحين يومياً من 9:00 حتى 22:00</p>
+          </article>
+        </section>
+      </div>
+    </section>
+  </main>
+
+  <footer class="border-t border-slate-200 bg-white py-10">
+    <div class="mx-auto grid w-[min(1200px,95%)] justify-items-center gap-2 text-center">
+      <h3 class="font-display text-2xl font-extrabold text-luxury-700">TheBeldiShop</h3>
+      <p class="text-sm text-slate-600">WhatsApp: +212 600 00 00 00 | التوصيل فجميع المدن المغربية</p>
+      <p class="text-xs text-slate-500">© 2026 TheBeldiShop. جميع الحقوق محفوظة.</p>
+    </div>
+  </footer>
+
+  <a class="whatsapp-float" href="https://wa.me/212642047321" target="_blank" rel="noopener noreferrer" aria-label="تواصل معنا عبر واتساب">
+    <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+      <path fill="currentColor" d="M20.5 3.5A11 11 0 0 0 3.85 17.4L2 22l4.75-1.75A11 11 0 1 0 20.5 3.5ZM12 20a8 8 0 0 1-4.05-1.1l-.3-.18-2.82 1.04 1.04-2.75-.2-.31A8 8 0 1 1 12 20Zm4.4-5.95c-.24-.12-1.43-.7-1.65-.78-.22-.08-.38-.12-.54.12-.16.24-.62.78-.76.94-.14.16-.28.18-.52.06-.24-.12-1-.37-1.9-1.18-.7-.62-1.17-1.38-1.3-1.62-.14-.24-.01-.37.1-.49.11-.11.24-.28.36-.42.12-.14.16-.24.24-.4.08-.16.04-.3-.02-.42-.06-.12-.54-1.3-.74-1.78-.2-.48-.4-.42-.54-.43h-.46c-.16 0-.42.06-.64.3-.22.24-.84.82-.84 2 0 1.18.86 2.32.98 2.48.12.16 1.69 2.58 4.1 3.62.57.25 1.01.4 1.36.51.57.18 1.08.15 1.48.09.45-.07 1.43-.58 1.63-1.14.2-.56.2-1.04.14-1.14-.06-.1-.22-.16-.46-.28Z"/>
+    </svg>
+    <span>تواصل معنا عبر واتساب</span>
+  </a>
+
+  <div class="drawer-backdrop fixed inset-0 z-[70] bg-slate-900/40" id="cartDrawerBackdrop"></div>
+  <aside class="cart-drawer fixed right-0 top-0 z-[80] grid h-screen w-[min(430px,100vw)] grid-rows-[auto_1fr_auto] border-l border-slate-200 bg-white" id="cartDrawer" aria-hidden="true">
+    <div class="cart-drawer-header flex items-center justify-between border-b border-slate-200 px-4 py-3">
+      <h3 class="font-display text-xl font-bold text-luxury-800">سلة الشراء</h3>
+      <button class="drawer-close text-xl text-slate-500" id="closeCartDrawer" type="button" aria-label="سد السلة">✕</button>
+    </div>
+    <div class="cart-drawer-items space-y-2 overflow-y-auto p-3" id="cartDrawerItems"></div>
+    <div class="cart-drawer-footer space-y-3 border-t border-slate-200 px-4 py-3">
+      <div class="summary-row flex items-center justify-between text-sm text-slate-600">
+        <span>المجموع الفرعي</span>
+        <strong class="text-base font-bold text-luxury-800" id="cartDrawerTotal">0 DH</strong>
+      </div>
+      <button class="cta-btn glow w-full rounded-xl border border-gold-400/40 bg-gold-400 px-4 py-3 text-sm font-bold text-[#1f1600] transition hover:bg-gold-300" id="drawerCheckoutBtn" type="button">كمل الطلب فالواتساب</button>
+    </div>
+  </aside>
+
+  <div id="toast" class="toast fixed bottom-4 right-4 z-[90] rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 shadow-md">تم تحويلك للواتساب 📲</div>
+
+  <div id="adminModal" class="modal fixed inset-0 z-[95] grid place-content-center" aria-hidden="true">
+    <div class="modal-backdrop absolute inset-0 bg-slate-900/45" data-close="true"></div>
+    <div class="modal-card relative w-[min(420px,94vw)] space-y-3 rounded-2xl border border-slate-200 bg-white p-5 shadow-[0_20px_50px_rgba(15,23,42,.22)]">
+      <h3 class="font-display text-2xl font-bold text-luxury-800">دخول الأدمن</h3>
+      <p class="text-sm text-slate-600">دخل باش تدخل للوحة التحكم.</p>
+      <input type="email" id="adminEmailInput" placeholder="الإيميل" autocomplete="email" class="w-full rounded-xl border border-slate-300 bg-white px-3 py-2.5 text-slate-800 placeholder:text-slate-400 focus:outline-none" />
+      <input type="password" id="adminPasswordInput" placeholder="كود السر" autocomplete="current-password" class="w-full rounded-xl border border-slate-300 bg-white px-3 py-2.5 text-slate-800 placeholder:text-slate-400 focus:outline-none" />
+      <div class="modal-actions flex gap-2">
+        <button class="cta-btn glow flex-1 rounded-xl border border-gold-400/40 bg-gold-400 px-4 py-2.5 text-sm font-bold text-[#1f1600] transition hover:bg-gold-300" id="adminLoginBtn">دخول</button>
+        <button class="ghost-btn flex-1 rounded-xl border border-slate-300 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 transition hover:bg-slate-50" data-close="true">رجوع</button>
+      </div>
+      <p id="adminLoginError" class="error-text min-h-5 text-sm text-rose-400"></p>
+    </div>
+  </div>
+
+  <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+  <script>
+    // UI-only: attach AOS attributes to dynamically-rendered product cards without touching Supabase logic.
+    document.addEventListener('DOMContentLoaded', () => {
+      if (!window.AOS) return;
+
+      AOS.init({
+        once: true,
+        duration: 700,
+        easing: 'ease-out',
+        offset: 40,
+      });
+
+      const grid = document.getElementById('productsGrid');
+      if (!grid) return;
+
+      const applyAos = () => {
+        const cards = grid.querySelectorAll('.product-card');
+        cards.forEach((card, i) => {
+          if (card.hasAttribute('data-aos')) return;
+          card.setAttribute('data-aos', 'fade-up');
+          card.setAttribute('data-aos-delay', String(i * 100));
+        });
+        AOS.refreshHard();
+      };
+
+      applyAos();
+      const observer = new MutationObserver(applyAos);
+      observer.observe(grid, { childList: true, subtree: true });
+    });
+  </script>
+  <script type="module" src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<!--
+  Changelog (UI-only):
+  - Updated typography and aligned header/footer with TheBeldiShop dark-luxury theme.
+  - Kept all required IDs for Supabase-backed rendering and actions; no data logic changes.
+-->
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>المنتوج | TheBeldiShop</title>
+  <meta name="description" content="جلابة مغربية فاخرة بخياطة دقيقة وجودة عالية. توصيل سريع 24-48 ساعة والدفع عند الاستلام داخل المغرب." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600;700&family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body data-page="product">
+  <div class="loading" id="loading" style="display:none">
+    <div class="spinner"></div>
+    <p>كنجيبو تفاصيل المنتوج...</p>
+  </div>
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="brand" href="index.html" aria-label="TheBeldiShop">
+        <span class="brand-name">TheBeldiShop</span>
+      </a>
+      <button class="nav-admin" id="adminTrigger" type="button" aria-label="دخول الأدمن">دخول الأدمن</button>
+    </div>
+  </header>
+
+  <main class="product-page" id="mainContent">
+    <section class="product-details" aria-labelledby="productName">
+      <div class="container">
+        <div id="productDetails" class="details-grid reveal">
+          <div class="details-image premium-image-card">
+            <div class="main-image-wrap" id="imageZoomWrap">
+              <img id="productImage" src="" alt="" />
+              <button class="zoom-btn" id="zoomImageBtn" type="button" aria-label="تكبير الصورة">🔍 تكبير</button>
+            </div>
+            <div id="productThumbs" class="thumbs-grid" aria-label="صور إضافية"></div>
+            <figure class="lifestyle-frame">
+              <img id="productLifestyleImage" src="" alt="إطلالة حقيقية بالمنتوج" />
+              <figcaption>إطلالة فالحياة اليومية: نفس الخامة ونفس اللوك.</figcaption>
+            </figure>
+          </div>
+
+          <div class="details-info">
+            <span class="pill">منتوج مغربي</span>
+            <h2 id="productName"></h2>
+
+            <div class="rating-line" aria-label="تقييم المنتوج">
+              <strong id="productRatingValue">التقييم العام:4.8 من 5</strong>
+              <span id="productReviewsCount">بناء على 120 تقييم موثق من الزبناء</span>
+            </div>
+
+            <div class="urgency-line">
+              <span class="urgency-chip" id="productUrgency">🔥 باقي 3 فقط في المخزون</span>
+              <span class="delivery-chip">🎯 توصيل خلال 24-48 ساعة</span>
+            </div>
+
+            <div class="details-price" id="productPrice"></div>
+
+            <div class="trust-badges" aria-label="ضمانات الشراء">
+              <span>💳 الدفع عند الاستلام</span>
+              <span>🔄 إرجاع مجاني</span>
+              <span>🚚 شحن سريع لكل المدن</span>
+            </div>
+
+            <div class="variant-block" id="sizeBlock">
+              <div class="variant-head">
+                <h3>اختار المقاس</h3>
+                <button type="button" class="size-guide-link" id="openSizeGuideBtn">دليل المقاسات</button>
+              </div>
+              <div class="variant-options" id="sizeOptions" role="listbox" aria-label="المقاسات"></div>
+            </div>
+
+            <div class="variant-block">
+              <h3>اختار اللون</h3>
+              <div class="variant-options" id="colorOptions" role="listbox" aria-label="الألوان">
+                <button type="button" class="variant-pill is-selected" data-variant-color="أسود">أسود</button>
+                <button type="button" class="variant-pill" data-variant-color="سكري">سكري</button>
+                <button type="button" class="variant-pill" data-variant-color="كحلي">كحلي</button>
+                <button type="button" class="variant-pill" data-variant-color="زيتي">زيتي</button>
+              </div>
+            </div>
+
+            <div class="description-box">
+              <h3>الوصف</h3>
+              <p id="productDescription"></p>
+              <p class="desc-marketing">خياطة دقيقة، راحة فاللبس، وتصميم مناسب للمناسبات والخروجات اليومية بستايل مغربي راقي.</p>
+            </div>
+
+            <div class="details-actions">
+              <button class="cta-btn glow" id="addToCartBtn">اشري دابا</button>
+              <button class="ghost-btn whatsapp-btn" id="whatsAppBtn">🟢 طلب عبر واتساب</button>
+            </div>
+            <a href="index.html#products" class="ghost-btn back-link">رجع للمنتوجات</a>
+          </div>
+        </div>
+
+        <section class="why-choose-us" aria-label="لماذا تختارنا">
+          <h3>علاش تختار TheBeldiShop؟</h3>
+          <div class="why-grid">
+            <article>
+              <h4>خامة ممتازة</h4>
+              <p>كنختارو ثوب مريح وكيعيش طويل مع استعمال يومي.</p>
+            </article>
+            <article>
+              <h4>تشطيب احترافي</h4>
+              <p>تفاصيل الخياطة والمقاس مدروسة باش يجيك اللوك مرتب.</p>
+            </article>
+            <article>
+              <h4>خدمة زبناء سريعة</h4>
+              <p>متابعة واتساب من تأكيد الطلب حتى التوصيل.</p>
+            </article>
+          </div>
+        </section>
+
+        <section class="reviews-proof" aria-label="آراء الزبناء">
+          <h3>آراء الزبناء بالصور</h3>
+          <div class="reviews-grid">
+            <article class="review-card">
+              <div class="review-media">📷</div>
+              <p>"الجلابة جاتني نفس الصورة والخياطة نقية بزاف."</p>
+              <span>سارة - الدار البيضاء</span>
+            </article>
+            <article class="review-card">
+              <div class="review-media">📷</div>
+              <p>"المقاس مناسب والتوصيل كان فـ 24 ساعة فعلا."</p>
+              <span>أمين - الرباط</span>
+            </article>
+            <article class="review-card">
+              <div class="review-media">📷</div>
+              <p>"ستايل راقي وثقة فالتعامل. غادي نعاود نطلب."</p>
+              <span>مريم - مراكش</span>
+            </article>
+          </div>
+        </section>
+
+        <section class="delivery-info" aria-label="معلومات التوصيل">
+          <h3>معلومات التوصيل والاسترجاع</h3>
+          <ul>
+            <li>التوصيل لجميع المدن المغربية خلال 24-48 ساعة.</li>
+            <li>الدفع عند الاستلام متاح داخل المغرب.</li>
+            <li>إمكانية إرجاع أو تبديل المنتوج وفق الشروط.</li>
+          </ul>
+        </section>
+
+        <div id="productNotFound" class="empty-state hidden">
+          <h3>سمح لينا، هاد المنتوج ما بقاش متوفر</h3>
+          <p>شوف شي منتوجات أخرى فالصفحة الرئيسية.</p>
+          <a href="index.html#products" class="cta-btn glow">شوف المنتوجات</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div class="sticky-product-cta" id="stickyProductCta" aria-label="شراء سريع">
+    <div class="sticky-price" id="stickyPrice">0 DH</div>
+    <button class="cta-btn glow" id="stickyBuyNowBtn" type="button">اشري الآن</button>
+  </div>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <h3 class="footer-brand">TheBeldiShop</h3>
+      <p class="footer-tagline">مزيج بين الأصالة والستايل العصري.</p>
+    </div>
+  </footer>
+
+  <div id="toast" class="toast">تم تحويلك إلى واتساب 📲</div>
+
+  <div id="adminModal" class="modal" aria-hidden="true">
+    <div class="modal-backdrop" data-close="true"></div>
+    <div class="modal-card">
+      <h3>دخول الأدمن</h3>
+      <p>دخل باش تدخل للوحة التحكم.</p>
+      <input type="email" id="adminEmailInput" placeholder="الإيميل" autocomplete="email" />
+      <input type="password" id="adminPasswordInput" placeholder="كود السر" autocomplete="current-password" />
+      <div class="modal-actions">
+        <button class="cta-btn glow" id="adminLoginBtn">دخول</button>
+        <button class="ghost-btn" data-close="true">رجوع</button>
+      </div>
+      <p id="adminLoginError" class="error-text"></p>
+    </div>
+  </div>
+
+  <div id="sizeGuideModal" class="modal" aria-hidden="true">
+    <div class="modal-backdrop" data-size-close="true"></div>
+    <div class="modal-card">
+      <h3>دليل المقاسات</h3>
+      <p>اختار المقاس حسب طولك والبنية ديالك:</p>
+      <ul class="size-guide-list">
+        <li>S: طول 160-168cm | وزن 55-65kg</li>
+        <li>M: طول 168-175cm | وزن 65-75kg</li>
+        <li>L: طول 175-182cm | وزن 75-85kg</li>
+        <li>XL: طول 182-190cm | وزن 85-95kg</li>
+      </ul>
+      <div class="modal-actions">
+        <button class="cta-btn" type="button" data-size-close="true">فهمت</button>
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="script.js"></script>
+</body>
+</html>

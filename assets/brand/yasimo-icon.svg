@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none" aria-label="YASIMO STORE icon">
+  <rect x="12" y="28" width="40" height="18" rx="6" stroke="#2563EB" stroke-width="3" />
+  <circle cx="22" cy="52" r="3" fill="#2563EB" />
+  <circle cx="42" cy="52" r="3" fill="#2563EB" />
+  <path d="M20 14 L32 26 L44 14" stroke="#2563EB" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+  <path d="M32 26 L32 36" stroke="#2563EB" stroke-width="3" stroke-linecap="round" />
+  <path d="M28 32 L32 36 L36 32" stroke="#2563EB" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+</svg>

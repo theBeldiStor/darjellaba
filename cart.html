@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<!--
+  Changelog (UI-only):
+  - Updated typography and aligned header/footer with TheBeldiShop dark-luxury theme.
+  - Preserved all cart DOM IDs/classes used by JS; no data logic changes.
+-->
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>السلة | TheBeldiShop</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600;700&family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body data-page="cart">
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="brand" href="index.html" aria-label="TheBeldiShop">
+        <span class="brand-name">TheBeldiShop</span>
+      </a>
+      <button class="nav-admin" id="adminTrigger" type="button" aria-label="دخول الأدمن">دخول الأدمن</button>
+    </div>
+  </header>
+
+  <main class="cart-page" id="mainContent">
+    <section class="cart-section" aria-labelledby="cartPageHeading">
+      <div class="container">
+        <div class="section-header reveal">
+          <div>
+            <h3 id="cartPageHeading">السلة ديالك</h3>
+            <p>راجع الطلب قبل ما تبعثو للواتساب.</p>
+          </div>
+          <a href="index.html#products" class="ghost-btn">كمل الشرا</a>
+        </div>
+
+        <div class="cart-layout">
+          <div id="cartItems" class="cart-items" aria-live="polite"></div>
+          <div class="cart-summary">
+            <h4>الملخص</h4>
+            <div class="summary-row">
+              <span>المجموع</span>
+              <strong id="cartTotal">0 درهم</strong>
+            </div>
+            <button class="cta-btn glow" id="checkoutBtn">كمل الطلب فالواتساب</button>
+            <button class="ghost-btn" id="clearCartBtn">فرّغ السلة</button>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <h3 class="footer-brand">TheBeldiShop</h3>
+      <p class="footer-tagline">مزيج بين الأصالة والستايل العصري.</p>
+    </div>
+  </footer>
+
+  <div id="toast" class="toast">تم تحويلك إلى واتساب 📲</div>
+
+  <div id="adminModal" class="modal" aria-hidden="true">
+    <div class="modal-backdrop" data-close="true"></div>
+    <div class="modal-card">
+      <h3>دخول الأدمن</h3>
+      <p>دخل باش تدخل للوحة التحكم.</p>
+      <input type="email" id="adminEmailInput" placeholder="الإيميل" autocomplete="email" />
+      <input type="password" id="adminPasswordInput" placeholder="كود السر" autocomplete="current-password" />
+      <div class="modal-actions">
+        <button class="cta-btn glow" id="adminLoginBtn">دخول</button>
+        <button class="ghost-btn" data-close="true">رجوع</button>
+      </div>
+      <p id="adminLoginError" class="error-text"></p>
+    </div>
+  </div>
+
+  <script type="module" src="script.js"></script>
+</body>
+</html>

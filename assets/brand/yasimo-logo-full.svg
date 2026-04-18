@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 64" fill="none" aria-label="YASIMO STORE logo">
+  <g transform="translate(0,0)">
+    <rect x="6" y="18" width="40" height="18" rx="6" stroke="#2563EB" stroke-width="3" />
+    <circle cx="16" cy="42" r="3" fill="#2563EB" />
+    <circle cx="36" cy="42" r="3" fill="#2563EB" />
+    <path d="M14 6 L26 18 L38 6" stroke="#2563EB" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+    <path d="M26 18 L26 28" stroke="#2563EB" stroke-width="3" stroke-linecap="round" />
+    <path d="M22 24 L26 28 L30 24" stroke="#2563EB" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+  </g>
+  <text x="64" y="30" fill="#111827" font-family="Poppins, Montserrat, Arial, sans-serif" font-size="22" font-weight="700" letter-spacing="1">YASIMO</text>
+  <text x="64" y="52" fill="#22C55E" font-family="Poppins, Montserrat, Arial, sans-serif" font-size="14" font-weight="600" letter-spacing="2">STORE</text>
+</svg>

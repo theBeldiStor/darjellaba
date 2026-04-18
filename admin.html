@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<!--
+  Changelog (UI-only):
+  - Updated typography to Playfair Display + Inter and aligned header/footer with TheBeldiShop dark-luxury theme.
+  - Preserved all admin IDs/forms and Supabase auth hooks; no data layer changes.
+-->
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>الأدمن | TheBeldiShop</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600;700&family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body data-page="admin">
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="brand" href="index.html" aria-label="TheBeldiShop">
+        <span class="brand-name">TheBeldiShop</span>
+      </a>
+      <button class="nav-admin" id="adminTrigger" type="button" aria-label="دخول الأدمن">دخول الأدمن</button>
+    </div>
+  </header>
+
+  <main class="admin-main" id="mainContent">
+    <section class="admin-gate" id="adminGate">
+      <div class="login-card reveal">
+        <h2>دخول الأدمن</h2>
+        <p>باش تتحكم فالمنتوجات خاصك تدخل للحساب.</p>
+        <button class="cta-btn glow" id="openAdminModal">دخول</button>
+        <p class="note-text">المنتوجات كيتخزنو دابا فقاعدة بيانات Supabase.</p>
+      </div>
+    </section>
+
+    <section class="admin-panel" id="panelSection">
+      <div class="container">
+        <div class="panel-header">
+          <div>
+            <h2>تسيير المنتوجات</h2>
+            <p>زيد، بدّل، ولا حدف المنتوجات. التحديث كيبان مباشرة فالصفحة الرئيسية.</p>
+          </div>
+          <button class="ghost-btn" id="logoutBtn">خروج</button>
+        </div>
+
+        <form id="productForm" class="product-form">
+          <input type="text" id="productName" placeholder="الاسم" required />
+          <input type="text" id="productPrice" placeholder="الثمن" required />
+          <input type="text" id="productSizes" placeholder="المقاسات (مثال: S, M, L, XL)" />
+          <input type="number" id="productRating" placeholder="التقييم من 5 (مثال: 4.8)" min="0" max="5" step="0.1" />
+          <input type="number" id="productReviewsCount" placeholder="عدد التقييمات (مثال: 120)" min="0" step="1" />
+          <input type="text" id="productAvailability" placeholder="نص التوفر (مثال: متوفر / باقي 3 فقط)" />
+          <input type="text" id="productCategory" placeholder="الصنف (category)" />
+          <input type="number" id="productStock" placeholder="المخزون (stock)" min="0" />
+          <div class="file-field">
+            <label for="productImageFile">صورة المنتوج</label>
+            <input type="file" id="productImageFile" class="file-input" accept="image/*" capture="environment" />
+            <div class="image-preview" id="imagePreview">
+              <img id="imagePreviewImg" alt="معاينة صورة المنتوج" />
+              <span>مازال ما تختارات حتى صورة</span>
+            </div>
+            <span class="note-text">تقدر تصور مباشرة بالكاميرا فالموبايل.</span>
+          </div>
+          <textarea id="productDescription" rows="4" placeholder="الوصف"></textarea>
+          <button type="submit" class="cta-btn glow" id="saveBtn">زيد المنتوج</button>
+          <button type="button" class="ghost-btn" id="cancelEdit" hidden>رجوع من التعديل</button>
+        </form>
+
+        <div class="admin-table" id="adminTable"></div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <h3 class="footer-brand">TheBeldiShop</h3>
+      <p class="footer-tagline">مزيج بين الأصالة والستايل العصري.</p>
+    </div>
+  </footer>
+
+  <div id="toast" class="toast">تم التحديث بنجاح ✅</div>
+
+  <div id="adminModal" class="modal" aria-hidden="true">
+    <div class="modal-backdrop" data-close="true"></div>
+    <div class="modal-card">
+      <h3>دخول الأدمن</h3>
+      <p>دخل باش تتحكم فالمنتوجات.</p>
+      <input type="email" id="adminEmailInput" placeholder="الإيميل" autocomplete="email" />
+      <input type="password" id="adminPasswordInput" placeholder="كود السر" autocomplete="current-password" />
+      <div class="modal-actions">
+        <button class="cta-btn glow" id="adminLoginBtn">دخول</button>
+        <button class="ghost-btn" data-close="true">رجوع</button>
+      </div>
+      <p id="adminLoginError" class="error-text"></p>
+    </div>
+  </div>
+
+  <script type="module" src="script.js"></script>
+</body>
+</html>
