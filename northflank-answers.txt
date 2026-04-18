@@ -1,0 +1,13 @@
+Northflank quick answers for this repository:
+
+1) What would you like to deploy?
+Static website (Dockerfile from GitHub repository)
+
+2) How did you hear about us?
+Google Search (or Other)
+
+3) Where do you want to deploy?
+Europe West (or nearest region to your users)
+
+4) Do you plan to use Northflank for work or for personal projects?
+Personal projects (choose Work if this is for a business)
