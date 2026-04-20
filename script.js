@@ -296,7 +296,6 @@ function productCardTemplate(product) {
         </div>
         <span class="urgency-badge">${urgency}</span>
         <div class="card-actions">
-          <button class="btn btn-dark" data-action="add" data-id="${product.id}">زيد للسلة</button>
           <button class="btn btn-gold" data-action="buy" data-id="${product.id}">شري دابا</button>
         </div>
       </div>
