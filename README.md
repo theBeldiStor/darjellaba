@@ -1,4 +1,4 @@
-# thebeldishop
+# Dar Jellaba
 
 Static storefront ready for deployment on Northflank or Koyeb.
 
@@ -22,4 +22,4 @@ Suggested onboarding answers for Northflank are in `northflank-answers.txt`.
 ## Runtime details
 
 - Static files are served by Caddy.
-- App listens on `PORT` provided by platform (fallback: `8080`).
+- App listens on `PORT` provided by platform (fallback: `8080`).# thebeldishop
