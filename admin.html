@@ -1,101 +1,111 @@
 <!DOCTYPE html>
-<!--
-  Changelog (UI-only):
-  - Updated typography to Playfair Display + Inter and aligned header/footer with TheBeldiShop dark-luxury theme.
-  - Preserved all admin IDs/forms and Supabase auth hooks; no data layer changes.
--->
 <html lang="ar" dir="rtl">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>الأدمن | TheBeldiShop</title>
+  <title>لوحة المنتجات | Dar Jellaba</title>
+  <meta name="description" content="لوحة محلية لتدبير المنتجات بدون قاعدة بيانات." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600;700&family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="style.css" />
 </head>
 <body data-page="admin">
   <header class="site-header">
-    <div class="header-inner">
-      <a class="brand" href="index.html" aria-label="TheBeldiShop">
-        <span class="brand-name">TheBeldiShop</span>
-      </a>
-      <button class="nav-admin" id="adminTrigger" type="button" aria-label="دخول الأدمن">دخول الأدمن</button>
+    <div class="container nav-wrap">
+      <a class="brand" href="index.html">Dar Jellaba</a>
+      <nav class="main-nav">
+        <a href="index.html#home">الرئيسية</a>
+        <a href="index.html#products">المنتوجات</a>
+        <a href="index.html#contact">تواصل</a>
+      </nav>
+      <div class="nav-actions">
+        <a class="admin-link" href="cart.html">السلة</a>
+        <button class="cart-btn" id="openCartBtn" type="button" aria-label="فتح السلة">
+          <span>🛒</span>
+          <span data-cart-count>0</span>
+        </button>
+      </div>
     </div>
   </header>
 
-  <main class="admin-main" id="mainContent">
-    <section class="admin-gate" id="adminGate">
-      <div class="login-card reveal">
-        <h2>دخول الأدمن</h2>
-        <p>باش تتحكم فالمنتوجات خاصك تدخل للحساب.</p>
-        <button class="cta-btn glow" id="openAdminModal">دخول</button>
-        <p class="note-text">المنتوجات كيتخزنو دابا فقاعدة بيانات Supabase.</p>
-      </div>
-    </section>
+  <main class="section">
+    <div class="container admin-grid">
+      <section class="admin-card reveal">
+        <h1 class="section-title">لوحة إدارة المنتجات (Local)</h1>
+        <p class="section-subtitle">بدون قاعدة بيانات: كل التعديلات كتتحفظ فالمتصفح.</p>
 
-    <section class="admin-panel" id="panelSection">
-      <div class="container">
-        <div class="panel-header">
-          <div>
-            <h2>تسيير المنتوجات</h2>
-            <p>زيد، بدّل، ولا حدف المنتوجات. التحديث كيبان مباشرة فالصفحة الرئيسية.</p>
-          </div>
-          <button class="ghost-btn" id="logoutBtn">خروج</button>
-        </div>
-
-        <form id="productForm" class="product-form">
-          <input type="text" id="productName" placeholder="الاسم" required />
-          <input type="text" id="productPrice" placeholder="الثمن" required />
-          <input type="text" id="productSizes" placeholder="المقاسات (مثال: S, M, L, XL)" />
-          <input type="number" id="productRating" placeholder="التقييم من 5 (مثال: 4.8)" min="0" max="5" step="0.1" />
-          <input type="number" id="productReviewsCount" placeholder="عدد التقييمات (مثال: 120)" min="0" step="1" />
-          <input type="text" id="productAvailability" placeholder="نص التوفر (مثال: متوفر / باقي 3 فقط)" />
-          <input type="text" id="productCategory" placeholder="الصنف (category)" />
-          <input type="number" id="productStock" placeholder="المخزون (stock)" min="0" />
-          <div class="file-field">
-            <label for="productImageFile">صورة المنتوج</label>
-            <input type="file" id="productImageFile" class="file-input" accept="image/*" capture="environment" />
-            <div class="image-preview" id="imagePreview">
-              <img id="imagePreviewImg" alt="معاينة صورة المنتوج" />
-              <span>مازال ما تختارات حتى صورة</span>
-            </div>
-            <span class="note-text">تقدر تصور مباشرة بالكاميرا فالموبايل.</span>
-          </div>
-          <textarea id="productDescription" rows="4" placeholder="الوصف"></textarea>
-          <button type="submit" class="cta-btn glow" id="saveBtn">زيد المنتوج</button>
-          <button type="button" class="ghost-btn" id="cancelEdit" hidden>رجوع من التعديل</button>
+        <form class="admin-form" id="adminProductForm">
+          <input name="name" type="text" placeholder="اسم المنتوج" required />
+          <input name="price" type="number" placeholder="الثمن الجديد" min="1" required />
+          <input name="oldPrice" type="number" placeholder="الثمن القديم" min="1" />
+          <input name="stock" type="number" placeholder="المخزون" min="0" />
+          <input name="rating" type="number" placeholder="التقييم (مثال 4.8)" min="0" max="5" step="0.1" />
+          <input name="reviews" type="number" placeholder="عدد التقييمات" min="0" />
+          <select name="badge">
+            <option value="new">New</option>
+            <option value="best">Best Seller</option>
+          </select>
+          <input name="image" type="url" placeholder="رابط الصورة" />
+          <textarea name="description" rows="4" placeholder="وصف قصير"></textarea>
+          <button class="btn btn-gold" type="submit">زيد المنتوج</button>
         </form>
 
-        <div class="admin-table" id="adminTable"></div>
-      </div>
-    </section>
+        <div class="admin-actions">
+          <button class="btn btn-outline" id="resetCatalogBtn" type="button">رجع الكاتالوج الافتراضي</button>
+          <a class="btn btn-dark" href="index.html#products">شوف النتيجة فالواجهة</a>
+        </div>
+      </section>
+
+      <section class="admin-card reveal">
+        <h2>لائحة المنتجات الحالية</h2>
+        <div class="admin-list" id="adminProductsList"></div>
+      </section>
+    </div>
   </main>
 
   <footer class="site-footer">
-    <div class="container footer-inner">
-      <h3 class="footer-brand">TheBeldiShop</h3>
-      <p class="footer-tagline">مزيج بين الأصالة والستايل العصري.</p>
+    <div class="container footer-grid">
+      <div>
+        <h3>Dar Jellaba</h3>
+        <p>لوحة محلية للتجريب السريع بلا back-end.</p>
+      </div>
+      <div>
+        <h4>روابط</h4>
+        <a href="index.html">المتجر</a>
+        <a href="cart.html">السلة</a>
+      </div>
+      <div>
+        <h4>تواصل</h4>
+        <a href="https://wa.me/212642047321" target="_blank" rel="noopener noreferrer">WhatsApp</a>
+        <a href="https://www.facebook.com/profile.php?id=100086131103739&sk=reels_tab" target="_blank" rel="noopener noreferrer">Facebook</a>
+      </div>
     </div>
   </footer>
 
-  <div id="toast" class="toast">تم التحديث بنجاح ✅</div>
+  <a class="whatsapp-float" href="https://wa.me/212642047321" target="_blank" rel="noopener noreferrer">
+    <span>💬</span>
+    <span>WhatsApp</span>
+  </a>
 
-  <div id="adminModal" class="modal" aria-hidden="true">
-    <div class="modal-backdrop" data-close="true"></div>
-    <div class="modal-card">
-      <h3>دخول الأدمن</h3>
-      <p>دخل باش تتحكم فالمنتوجات.</p>
-      <input type="email" id="adminEmailInput" placeholder="الإيميل" autocomplete="email" />
-      <input type="password" id="adminPasswordInput" placeholder="كود السر" autocomplete="current-password" />
-      <div class="modal-actions">
-        <button class="cta-btn glow" id="adminLoginBtn">دخول</button>
-        <button class="ghost-btn" data-close="true">رجوع</button>
-      </div>
-      <p id="adminLoginError" class="error-text"></p>
+  <div class="drawer-backdrop" id="cartBackdrop"></div>
+  <aside class="cart-drawer" id="cartDrawer">
+    <div class="drawer-head">
+      <strong>سلة الشراء</strong>
+      <button class="icon-btn" id="closeCartBtn" type="button">اغلاق</button>
     </div>
-  </div>
+    <div class="drawer-items" id="cartDrawerItems"></div>
+    <div class="drawer-foot">
+      <div class="drawer-total">
+        <span>المجموع</span>
+        <strong id="cartDrawerTotal">0 DH</strong>
+      </div>
+      <button class="btn btn-gold" id="drawerCheckoutBtn" type="button">كمل الطلب فالواتساب</button>
+      <a class="btn btn-outline" href="cart.html">مشي للسلة</a>
+    </div>
+  </aside>
 
+  <div class="toast" id="toast">تمت العملية بنجاح</div>
   <script type="module" src="script.js"></script>
 </body>
 </html>

@@ -1,80 +1,100 @@
 <!DOCTYPE html>
-<!--
-  Changelog (UI-only):
-  - Updated typography and aligned header/footer with TheBeldiShop dark-luxury theme.
-  - Preserved all cart DOM IDs/classes used by JS; no data logic changes.
--->
 <html lang="ar" dir="rtl">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>السلة | TheBeldiShop</title>
+  <title>السلة | Dar Jellaba</title>
+  <meta name="description" content="راجع الطلب ديالك وكمل الشراء بسهولة عبر واتساب." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600;700&family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="style.css" />
 </head>
 <body data-page="cart">
   <header class="site-header">
-    <div class="header-inner">
-      <a class="brand" href="index.html" aria-label="TheBeldiShop">
-        <span class="brand-name">TheBeldiShop</span>
-      </a>
-      <button class="nav-admin" id="adminTrigger" type="button" aria-label="دخول الأدمن">دخول الأدمن</button>
+    <div class="container nav-wrap">
+      <a class="brand" href="index.html">Dar Jellaba</a>
+      <nav class="main-nav">
+        <a href="index.html#home">الرئيسية</a>
+        <a href="index.html#products">المنتوجات</a>
+        <a href="index.html#contact">تواصل</a>
+      </nav>
+      <div class="nav-actions">
+        <a class="admin-link" href="admin.html">Admin</a>
+        <button class="cart-btn" id="openCartBtn" type="button" aria-label="فتح السلة">
+          <span>🛒</span>
+          <span data-cart-count>0</span>
+        </button>
+      </div>
     </div>
   </header>
 
-  <main class="cart-page" id="mainContent">
-    <section class="cart-section" aria-labelledby="cartPageHeading">
-      <div class="container">
-        <div class="section-header reveal">
-          <div>
-            <h3 id="cartPageHeading">السلة ديالك</h3>
-            <p>راجع الطلب قبل ما تبعثو للواتساب.</p>
-          </div>
-          <a href="index.html#products" class="ghost-btn">كمل الشرا</a>
-        </div>
-
-        <div class="cart-layout">
-          <div id="cartItems" class="cart-items" aria-live="polite"></div>
-          <div class="cart-summary">
-            <h4>الملخص</h4>
-            <div class="summary-row">
-              <span>المجموع</span>
-              <strong id="cartTotal">0 درهم</strong>
-            </div>
-            <button class="cta-btn glow" id="checkoutBtn">كمل الطلب فالواتساب</button>
-            <button class="ghost-btn" id="clearCartBtn">فرّغ السلة</button>
-          </div>
-        </div>
+  <main class="section">
+    <div class="container">
+      <div class="section-head reveal">
+        <h1 class="section-title">السلة ديالك</h1>
+        <p class="section-subtitle">راجع المنتوجات قبل التأكيد النهائي.</p>
       </div>
-    </section>
+
+      <div class="cart-layout">
+        <div class="cart-items" id="cartList"></div>
+
+        <aside class="cart-summary reveal">
+          <h3>ملخص الطلب</h3>
+          <div class="summary-row">
+            <span>المجموع</span>
+            <strong id="cartSubtotal">0 DH</strong>
+          </div>
+          <button class="btn btn-gold" id="cartCheckoutBtn" type="button">كمل الطلب فالواتساب</button>
+          <button class="btn btn-outline" id="clearCartBtn" type="button">فرغ السلة</button>
+          <a class="btn btn-dark" href="index.html#products">رجع تكمل الشرا</a>
+        </aside>
+      </div>
+    </div>
   </main>
 
   <footer class="site-footer">
-    <div class="container footer-inner">
-      <h3 class="footer-brand">TheBeldiShop</h3>
-      <p class="footer-tagline">مزيج بين الأصالة والستايل العصري.</p>
+    <div class="container footer-grid">
+      <div>
+        <h3>Dar Jellaba</h3>
+        <p>خدمة سريعة وتجربة شراء واضحة وسهلة.</p>
+      </div>
+      <div>
+        <h4>روابط</h4>
+        <a href="index.html#products">المنتوجات</a>
+        <a href="index.html#contact">تواصل</a>
+      </div>
+      <div>
+        <h4>سياسات</h4>
+        <a href="#">سياسة التوصيل</a>
+        <a href="#">سياسة الإرجاع</a>
+      </div>
     </div>
   </footer>
 
-  <div id="toast" class="toast">تم تحويلك إلى واتساب 📲</div>
+  <a class="whatsapp-float" href="https://wa.me/212642047321" target="_blank" rel="noopener noreferrer">
+    <span>💬</span>
+    <span>WhatsApp</span>
+  </a>
 
-  <div id="adminModal" class="modal" aria-hidden="true">
-    <div class="modal-backdrop" data-close="true"></div>
-    <div class="modal-card">
-      <h3>دخول الأدمن</h3>
-      <p>دخل باش تدخل للوحة التحكم.</p>
-      <input type="email" id="adminEmailInput" placeholder="الإيميل" autocomplete="email" />
-      <input type="password" id="adminPasswordInput" placeholder="كود السر" autocomplete="current-password" />
-      <div class="modal-actions">
-        <button class="cta-btn glow" id="adminLoginBtn">دخول</button>
-        <button class="ghost-btn" data-close="true">رجوع</button>
-      </div>
-      <p id="adminLoginError" class="error-text"></p>
+  <div class="drawer-backdrop" id="cartBackdrop"></div>
+  <aside class="cart-drawer" id="cartDrawer">
+    <div class="drawer-head">
+      <strong>سلة الشراء</strong>
+      <button class="icon-btn" id="closeCartBtn" type="button">اغلاق</button>
     </div>
-  </div>
+    <div class="drawer-items" id="cartDrawerItems"></div>
+    <div class="drawer-foot">
+      <div class="drawer-total">
+        <span>المجموع</span>
+        <strong id="cartDrawerTotal">0 DH</strong>
+      </div>
+      <button class="btn btn-gold" id="drawerCheckoutBtn" type="button">كمل الطلب فالواتساب</button>
+      <a class="btn btn-outline" href="cart.html">صفحة السلة</a>
+    </div>
+  </aside>
 
+  <div class="toast" id="toast">تمت العملية بنجاح</div>
   <script type="module" src="script.js"></script>
 </body>
 </html>
